@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="45">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>11</ID>
+      <Description>"Money"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{ Game   : Despot's Game.exe
+  Version: 
+  Date   : 2024-09-18
+  Author : skdia
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+
+aobscanmodule(INJECT,GameAssembly.dll,F3 0F 11 71 18 C6) // should be unique
+alloc(newmem,$1000,INJECT)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov rax, 0x00000000461C0000
+  mov qword ptr [rsp+20], rax
+  movss xmm12, [rsp+20]
+  movss [rcx+18],xmm12
+  jmp return
+
+INJECT:
+  jmp newmem
+return:
+registersymbol(INJECT)
+
+[DISABLE]
+
+INJECT:
+  db F3 0F 11 71 18
+
+unregistersymbol(INJECT)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: GameAssembly.dll+14FA652
+
+GameAssembly.dll+14FA63B: CC                    - int 3 
+GameAssembly.dll+14FA63C: CC                    - int 3 
+GameAssembly.dll+14FA63D: CC                    - int 3 
+GameAssembly.dll+14FA63E: CC                    - int 3 
+GameAssembly.dll+14FA63F: CC                    - int 3 
+GameAssembly.dll+14FA640: 40 57                 - push rdi
+GameAssembly.dll+14FA642: 48 83 EC 30           - sub rsp,30
+GameAssembly.dll+14FA646: 48 8B 79 28           - mov rdi,[rcx+28]
+GameAssembly.dll+14FA64A: 0F 29 74 24 20        - movaps [rsp+20],xmm6
+GameAssembly.dll+14FA64F: 0F 28 F1              - movaps xmm6,xmm1
+// ---------- INJECTING HERE ----------
+GameAssembly.dll+14FA652: F3 0F 11 71 18        - movss [rcx+18],xmm6
+// ---------- DONE INJECTING  ----------
+GameAssembly.dll+14FA657: C6 41 10 01           - mov byte ptr [rcx+10],01
+GameAssembly.dll+14FA65B: 48 85 FF              - test rdi,rdi
+GameAssembly.dll+14FA65E: 74 3A                 - je GameAssembly.dll+14FA69A
+GameAssembly.dll+14FA660: 48 89 5C 24 40        - mov [rsp+40],rbx
+GameAssembly.dll+14FA665: 49 8B 40 18           - mov rax,[r8+18]
+GameAssembly.dll+14FA669: 48 8B 88 C0 00 00 00  - mov rcx,[rax+000000C0]
+GameAssembly.dll+14FA670: 48 8B 59 30           - mov rbx,[rcx+30]
+GameAssembly.dll+14FA674: F6 83 32 01 00 00 01  - test byte ptr [rbx+00000132],01
+GameAssembly.dll+14FA67B: 75 08                 - jne GameAssembly.dll+14FA685
+GameAssembly.dll+14FA67D: 48 8B CB              - mov rcx,rbx
+}
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+</CheatTable>
